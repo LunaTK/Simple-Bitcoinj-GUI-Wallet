@@ -12,9 +12,9 @@ plugins {
 
     // Apply the application plugin to add support for building an application
     id 'application'
-    id('distribution')
     id 'org.openjfx.javafxplugin' version '0.0.7'
     id 'com.github.johnrengelman.shadow' version '5.0.0'
+    id 'idea'
 }
 
 repositories {
@@ -29,7 +29,8 @@ dependencies {
     implementation 'org.bitcoinj:bitcoinj-core:0.15.1'
     implementation 'org.slf4j:slf4j-simple:1.7.26'
     implementation 'com.github.jengelman.gradle.plugins:shadow:2.0.1'
-    
+    implementation 'com.jfoenix:jfoenix:9.0.8' // Java 9
+    implementation 'com.google.zxing:core:3.3.3'
     // Use JUnit test framework
     testImplementation 'junit:junit:4.12'
 }
@@ -38,7 +39,7 @@ sourceSets {
   main {
     resources {
         srcDirs = ["src/main/java"]
-        includes = ["**/*.fxml", "**/*.png"]
+        includes = ["**/*.fxml", "**/*.png", "**/*.css"]
     }
   }
 }

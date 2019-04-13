@@ -23,7 +23,6 @@ import org.bitcoinj.wallet.listeners.WalletChangeEventListener;
 import org.bitcoinj.wallet.listeners.WalletCoinsReceivedEventListener;
 
 import javafx.application.Platform;
-import javafx.beans.value.ObservableStringValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -53,14 +52,6 @@ public class DashboardController implements Initializable {
         new Thread(() -> {
             initWallet();
         }).start();
-    }
-
-    @FXML
-    private void exitApp(ActionEvent event) {
-        new DialogBuilder("Do you want to quit?").build(stackPane, (e) -> {
-            Platform.exit();
-            System.exit(0);
-        }, null).show();
     }
 
     private void initWallet() {
@@ -141,9 +132,15 @@ public class DashboardController implements Initializable {
     }
 
     @FXML
-    private void onIssueNewAddress(ActionEvent event) {
-        System.out.println("New address : " + kit.wallet().freshReceiveAddress());
-        updateDisplayedWalletInfo();
+    private void onSendBitcoin(ActionEvent event) {
+    }
+
+    @FXML
+    private void exitApp(ActionEvent event) {
+        new DialogBuilder("Do you want to quit?").build(stackPane, (e) -> {
+            Platform.exit();
+            System.exit(0);
+        }, null).show();
     }
 
     @FXML

@@ -68,7 +68,7 @@
                               </Label>
                            </children>
                         </Pane>
-                        <JFXButton alignment="CENTER" buttonType="RAISED" layoutX="82.0" layoutY="402.0" onAction="#onIssueNewAddress" text="Issue a New Address" textFill="#6c7378" AnchorPane.leftAnchor="84.0" AnchorPane.rightAnchor="84.0">
+                        <JFXButton alignment="CENTER" buttonType="RAISED" layoutX="82.0" layoutY="402.0" onAction="#onSendBitcoin" text="Send Bitcoin" textFill="#6c7378" AnchorPane.leftAnchor="84.0" AnchorPane.rightAnchor="84.0">
                            <font>
                               <Font name="NanumSquare Bold" size="18.0" />
                            </font>

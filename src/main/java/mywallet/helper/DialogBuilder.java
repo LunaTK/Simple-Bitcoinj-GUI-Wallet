@@ -31,11 +31,11 @@ public class DialogBuilder {
         content.setHeading(new Text(title));
         content.setBody(new Text(this.content));
         JFXDialog dialog = new JFXDialog(stackPane, content, JFXDialog.DialogTransition.CENTER);
-        JFXButton btnOk = new JFXButton("Ok");
+        JFXButton btnOk = new JFXButton("OK");
         btnOk.setOnMouseClicked(onOk == null ? (e) -> {
             dialog.close();
         } : onOk);
-        JFXButton btnCancel = new JFXButton("Cancel");
+        JFXButton btnCancel = new JFXButton("CANCEL");
         btnCancel.setOnMouseClicked(onCancel == null ? (e) -> {
             dialog.close();
         } : onCancel);

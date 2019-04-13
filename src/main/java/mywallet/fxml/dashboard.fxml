@@ -9,86 +9,100 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.text.Font?>
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" style="-fx-background-color: transparent;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mywallet.DashboardController">
-    <children>
-        <StackPane fx:id="stackPane" layoutX="16.0" layoutY="16.0" AnchorPane.bottomAnchor="16.0" AnchorPane.leftAnchor="16.0" AnchorPane.rightAnchor="16.0" AnchorPane.topAnchor="16.0">
-            <children>
-                <AnchorPane prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: transparent;">
-                    <children>
-                        <AnchorPane layoutX="366.0" layoutY="22.0" maxWidth="409.0" prefHeight="424.0" prefWidth="379.0" style="-fx-background-color: white; -fx-background-radius: 1em; -fx-border-width: 1; -fx-border-color: #424242#424242; -fx-border-radius: 5; -fx-effect: dropshadow(three-pass-box, black, 10, 0, 0, 0)dropshadow(three-pass-box, purple, 10, 0, 0, 0);" AnchorPane.bottomAnchor="22.0" AnchorPane.leftAnchor="366.0" AnchorPane.rightAnchor="23.0" AnchorPane.topAnchor="22.0">
-                            <children>
-                                <JFXToolbar layoutX="3.0" layoutY="3.0" prefHeight="44.0" prefWidth="375.0" style="-fx-background-color: #FFC400#FFC400; -fx-border-radius: 0 5 0 0; -fx-background-radius: 0 5 0 0;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                                    <center>
-                                        <Label text="Transaction History" BorderPane.alignment="CENTER">
-                                            <font>
-                                                <Font name="SourceCodePro+Powerline+Awesome Regular" size="18.0" />
-                                            </font>
-                                        </Label>
-                                    </center>
-                                </JFXToolbar>
-                            </children>
-                        </AnchorPane>
-                        <AnchorPane layoutX="14.0" layoutY="14.0" maxWidth="-Infinity" prefHeight="440.0" prefWidth="364.0" style="-fx-background-color: #FFC400#FFC400; -fx-background-radius: 1em; -fx-effect: dropshadow(three-pass-box, black, 10, 0, 0, 0)dropshadow(three-pass-box, purple, 10, 0, 0, 0);" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="14.0">
-                            <children>
-                        <AnchorPane id="qr-display" layoutX="48.0" layoutY="101.0" prefHeight="228.0" prefWidth="259.0" stylesheets="@../resources/style.css" AnchorPane.leftAnchor="48.0" AnchorPane.rightAnchor="57.0" AnchorPane.topAnchor="101.0">
+   <children>
+      <StackPane fx:id="stackPane" layoutX="16.0" layoutY="16.0" AnchorPane.bottomAnchor="16.0" AnchorPane.leftAnchor="16.0" AnchorPane.rightAnchor="16.0" AnchorPane.topAnchor="16.0">
+         <children>
+            <AnchorPane prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: transparent;">
+               <children>
+                  <AnchorPane layoutX="366.0" layoutY="22.0" maxWidth="409.0" prefHeight="424.0" prefWidth="379.0" style="-fx-background-color: white; -fx-background-radius: 1em; -fx-border-width: 1; -fx-border-color: #424242#424242; -fx-border-radius: 5; -fx-effect: dropshadow(three-pass-box, black, 10, 0, 0, 0)dropshadow(three-pass-box, purple, 10, 0, 0, 0);" AnchorPane.bottomAnchor="22.0" AnchorPane.leftAnchor="366.0" AnchorPane.rightAnchor="23.0" AnchorPane.topAnchor="22.0">
+                     <children>
+                        <JFXToolbar layoutX="3.0" layoutY="3.0" prefHeight="44.0" prefWidth="375.0" style="-fx-background-color: #FFC400#FFC400; -fx-border-radius: 0 5 0 0; -fx-background-radius: 0 5 0 0;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                           <center>
+                              <Label text="Transaction History" BorderPane.alignment="CENTER">
+                                 <font>
+                                    <Font name="SourceCodePro+Powerline+Awesome Regular" size="18.0" />
+                                 </font>
+                              </Label>
+                           </center>
+                        </JFXToolbar>
+                     </children>
+                  </AnchorPane>
+                  <AnchorPane layoutX="14.0" layoutY="14.0" maxWidth="-Infinity" prefHeight="440.0" prefWidth="364.0" style="-fx-background-color: #FFC400#FFC400; -fx-background-radius: 1em; -fx-effect: dropshadow(three-pass-box, black, 10, 0, 0, 0)dropshadow(three-pass-box, purple, 10, 0, 0, 0);" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="14.0">
+                     <children>
+                        <AnchorPane id="qr-display" layoutX="48.0" layoutY="74.0" prefHeight="228.0" prefWidth="259.0" stylesheets="@../resources/style.css" AnchorPane.leftAnchor="48.0" AnchorPane.rightAnchor="57.0" AnchorPane.topAnchor="74.0">
                            <children>
-                                      <ImageView fx:id="qrImage" fitHeight="199.0" fitWidth="222.0" layoutX="34.0" layoutY="15.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="34.0" AnchorPane.rightAnchor="33.63951110839844" AnchorPane.topAnchor="14.0">
-                                          <image>
-                                              <Image url="@../resources/bitcoin.png" />
-                                          </image>
-                                      </ImageView>
+                              <ImageView fx:id="qrImage" fitHeight="199.0" fitWidth="222.0" layoutX="34.0" layoutY="15.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="34.0" AnchorPane.rightAnchor="33.63951110839844" AnchorPane.topAnchor="14.0">
+                                 <image>
+                                    <Image url="@../resources/bitcoin.png" />
+                                 </image>
+                              </ImageView>
                            </children>
                         </AnchorPane>
-                                <JFXButton id="btn-close" layoutX="14.0" layoutY="14.0" onAction="#exitApp" prefHeight="24.0" prefWidth="24.0" text=" " AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="14.0">
-                                    <stylesheets>
-                                        <URL value="@style.css" />
-                                        <URL value="@../resources/style.css" />
-                                    </stylesheets>
+                        <JFXButton id="btn-close" layoutX="14.0" layoutY="14.0" onAction="#exitApp" prefHeight="24.0" prefWidth="24.0" text=" " AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="14.0">
+                           <stylesheets>
+                              <URL value="@../resources/style.css" />
+                           </stylesheets>
                            <padding>
                               <Insets left="20.0" />
                            </padding>
                            <opaqueInsets>
                               <Insets />
                            </opaqueInsets>
-                                </JFXButton>
-                        <ImageView fitHeight="44.0" fitWidth="54.0" layoutX="48.0" layoutY="41.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@../resources/wallet.png" />
-                           </image>
-                        </ImageView>
-                        <Label layoutX="112.0" layoutY="46.0" text="Wallet Address">
-                           <font>
-                              <Font name="NanumSquare Bold" size="24.0" />
-                           </font>
-                        </Label>
-                        <JFXButton buttonType="RAISED" layoutX="86.0" layoutY="398.0" text="Issue a new address" textFill="#31383e">
+                        </JFXButton>
+                        <Pane layoutX="61.0" layoutY="26.0">
+                           <children>
+                              <ImageView fitHeight="44.0" fitWidth="54.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../resources/wallet.png" />
+                                 </image>
+                              </ImageView>
+                              <Label layoutX="64.0" layoutY="5.0" text="Wallet Address">
+                                 <font>
+                                    <Font name="NanumSquare Bold" size="24.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </Pane>
+                        <JFXButton alignment="CENTER" buttonType="RAISED" layoutX="82.0" layoutY="402.0" onAction="#onIssueNewAddress" text="Issue a New Address" textFill="#6c7378" AnchorPane.leftAnchor="84.0" AnchorPane.rightAnchor="84.0">
                            <font>
                               <Font name="NanumSquare Bold" size="18.0" />
                            </font>
                         </JFXButton>
-                        <JFXButton buttonType="RAISED" layoutX="95.0" layoutY="433.0" text="Request bitcoin" textFill="#31383e">
+                        <JFXButton alignment="CENTER" buttonType="RAISED" layoutX="95.0" layoutY="437.0" text="Request Bitcoin" textFill="#6c7378" AnchorPane.leftAnchor="84.0" AnchorPane.rightAnchor="84.0">
                            <font>
                               <Font size="19.0" />
                            </font>
                         </JFXButton>
-                        <JFXButton buttonType="RAISED" layoutX="104.0" layoutY="471.0" text="Encrypt Wallet" textFill="#31383e">
+                        <JFXButton alignment="CENTER" buttonType="RAISED" layoutX="104.0" layoutY="475.0" text="Encrypt Wallet" textFill="#6c7378" AnchorPane.leftAnchor="84.0" AnchorPane.rightAnchor="84.0">
                            <font>
                               <Font size="18.0" />
                            </font>
                         </JFXButton>
-                                <Label fx:id="labelAddress" contentDisplay="CENTER" layoutX="46.0" layoutY="339.0" prefHeight="18.0" prefWidth="274.0" text="bitcoin address" textFill="WHITE" textOverrun="CENTER_ELLIPSIS" AnchorPane.leftAnchor="46.0" AnchorPane.rightAnchor="45.0" AnchorPane.topAnchor="339.0">
+                        <Pane layoutX="22.0" layoutY="307.0" prefHeight="27.0" prefWidth="329.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0">
+                           <children>
+                              <Label fx:id="labelAddress" alignment="CENTER_RIGHT" contentDisplay="CENTER" layoutY="4.0" prefHeight="18.0" prefWidth="304.0" text="bitcoin address" textFill="WHITE" textOverrun="CENTER_ELLIPSIS">
+                                 <font>
+                                    <Font name="NanumSquare Bold" size="13.0" />
+                                 </font>
+                              </Label>
+                              <JFXButton id="btn-copy-address" layoutX="315.0" onAction="#onCopyAddress" stylesheets="@../resources/style.css" text=" " />
+                           </children>
+                        </Pane>
+                        <Label fx:id="labelBalance" alignment="CENTER" contentDisplay="RIGHT" layoutX="18.0" layoutY="341.0" prefHeight="44.0" prefWidth="338.0" text="0.00000000 BTC" textAlignment="RIGHT" underline="true" AnchorPane.leftAnchor="18.0" AnchorPane.rightAnchor="18.0">
                            <font>
-                              <Font name="NanumSquare Bold" size="13.0" />
+                              <Font name="NanumSquare ExtraBold" size="29.0" />
                            </font>
                         </Label>
-                            </children>
-                        </AnchorPane>
-                    </children>
-                </AnchorPane>
-            </children>
-        </StackPane>
-    </children>
+                     </children>
+                  </AnchorPane>
+               </children>
+            </AnchorPane>
+         </children>
+      </StackPane>
+   </children>
 </AnchorPane>

@@ -1,7 +1,7 @@
 package mywallet;
 
-import mywallet.helper.*;
-
+import java.awt.Toolkit;
+import java.awt.datatransfer.StringSelection;
 import java.io.File;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -12,15 +12,18 @@ import com.google.common.util.concurrent.Futures;
 import org.bitcoinj.core.Coin;
 import org.bitcoinj.core.ECKey;
 import org.bitcoinj.core.NetworkParameters;
+import org.bitcoinj.core.Transaction;
+import org.bitcoinj.core.TransactionConfidence;
 import org.bitcoinj.kits.WalletAppKit;
 import org.bitcoinj.params.TestNet3Params;
 import org.bitcoinj.utils.BriefLogFormatter;
 import org.bitcoinj.utils.Threading;
-import org.bitcoinj.wallet.listeners.WalletCoinsReceivedEventListener;
 import org.bitcoinj.wallet.Wallet;
-import org.bitcoinj.core.*;
+import org.bitcoinj.wallet.listeners.WalletChangeEventListener;
+import org.bitcoinj.wallet.listeners.WalletCoinsReceivedEventListener;
 
 import javafx.application.Platform;
+import javafx.beans.value.ObservableStringValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -29,7 +32,8 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
-import javafx.scene.text.Text;
+import mywallet.helper.DialogBuilder;
+import mywallet.helper.QRRenderer;
 
 public class DashboardController implements Initializable {
 
@@ -39,11 +43,13 @@ public class DashboardController implements Initializable {
     Label labelAddress;
     @FXML
     StackPane stackPane;
+    @FXML
+    Label labelBalance;
+
+    private WalletAppKit kit;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        System.out.println("hi");
-
         new Thread(() -> {
             initWallet();
         }).start();
@@ -51,7 +57,8 @@ public class DashboardController implements Initializable {
 
     @FXML
     private void exitApp(ActionEvent event) {
-        new DialogBuilder("종료하시겠습니까?").build(stackPane, (e) -> {
+        new DialogBuilder("Do you want to quit?").build(stackPane, (e) -> {
+            Platform.exit();
             System.exit(0);
         }, null).show();
     }
@@ -61,28 +68,33 @@ public class DashboardController implements Initializable {
         NetworkParameters params = TestNet3Params.get();
         String filePrefix = "forwarding-service-testnet";
 
-        WalletAppKit kit = new WalletAppKit(params, new File("."), filePrefix) {
+        kit = new WalletAppKit(params, new File("."), filePrefix) {
             @Override
             protected void onSetupCompleted() {
                 System.out.println(wallet().getKeyChainSeed().getMnemonicCode());
                 if (wallet().getKeyChainGroupSize() < 1) {
                     wallet().importKey(new ECKey());
                 }
-
-                Platform.runLater(() -> {
-                    labelAddress.setText(wallet().currentReceiveAddress().toString());
-                    new QRRenderer("mke14L8w3gP46wuKE9186ZrsxUedr7XyE7").displayIn(qrImage);
-                });
+                updateDisplayedWalletInfo();
                 System.out.println(wallet().currentReceiveAddress());
                 System.out.println(wallet().getIssuedReceiveKeys());
+
                 System.out.println(wallet().getBalance());
                 System.out.println(wallet().getRecentTransactions(10, true));
 
             }
         };
-        kit.startAsync();
-        kit.awaitRunning();
 
+        kit.startAsync();
+        // kit.awaitRunning();
+
+        kit.wallet().addChangeEventListener(new WalletChangeEventListener() {
+
+            @Override
+            public void onWalletChanged(Wallet wallet) {
+                System.out.println("Something changed in wallet");
+            }
+        });
         kit.wallet().addCoinsReceivedEventListener(new WalletCoinsReceivedEventListener() {
             @Override
             public void onCoinsReceived(Wallet w, Transaction tx, Coin prevBalance, Coin newBalance) {
@@ -124,6 +136,37 @@ public class DashboardController implements Initializable {
                     }
                 }, Threading.SAME_THREAD);
             }
+        });
+
+    }
+
+    @FXML
+    private void onIssueNewAddress(ActionEvent event) {
+        System.out.println("New address : " + kit.wallet().freshReceiveAddress());
+        updateDisplayedWalletInfo();
+    }
+
+    @FXML
+    private void onCopyAddress(ActionEvent event) {
+        Toolkit.getDefaultToolkit().getSystemClipboard()
+                .setContents(new StringSelection(kit.wallet().currentReceiveAddress().toString()), null);
+
+        Alert alert = new Alert(AlertType.WARNING);
+        alert.setTitle("Alert");
+        alert.setHeaderText("Address Copied!");
+        alert.setContentText(kit.wallet().currentReceiveAddress().toString());
+        alert.showAndWait();
+    }
+
+    private void updateDisplayedWalletInfo() {
+        Platform.runLater(() -> {
+            System.out.println("Updating displayed wallet info...");
+            labelAddress.setText(kit.wallet().currentReceiveAddress().toString());
+            System.out.println("labelAddress : " + kit.wallet().currentReceiveAddress().toString());
+            new QRRenderer(kit.wallet().currentReceiveAddress().toString()).displayIn(qrImage);
+            System.out.println("QRCode complete");
+            labelBalance.setText(kit.wallet().getBalance().toFriendlyString());
+            System.out.println("labelBalance complete : " + kit.wallet().getBalance().toFriendlyString());
         });
     }
 

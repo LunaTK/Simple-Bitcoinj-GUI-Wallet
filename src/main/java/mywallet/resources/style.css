@@ -35,3 +35,10 @@
     -fx-background-radius: 5;
     -fx-border-radius: 5;
 }
+
+#btn-copy-address {
+    -fx-background-image: url("copy.png");
+    -fx-background-repeat: stretch;
+    -fx-background-size: 20 20;
+    -fx-background-position: center center;
+}

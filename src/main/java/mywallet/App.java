@@ -1,9 +1,15 @@
 package mywallet;
 
-import mywallet.Dashboard;
+import org.bitcoinj.utils.Threading;
+
+import javafx.application.Platform;
+import mywallet.MyBitcoinWallet;
 
 public class App {
     public static void main(String args[]) {
-        Dashboard.main(args);
+        Threading.USER_THREAD = (Runnable runnable) -> {
+            Platform.runLater(runnable);
+        };
+        MyBitcoinWallet.main(args);
     }
 }

@@ -31,7 +31,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
 import javafx.scene.text.Text;
 
-public class MainController implements Initializable {
+public class DashboardController implements Initializable {
 
     @FXML
     ImageView qrImage;

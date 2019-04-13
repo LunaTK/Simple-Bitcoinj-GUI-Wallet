@@ -21,3 +21,17 @@
     -fx-background-size: 20 20;
     -fx-background-position: center center;
 }
+
+#qr-display,
+#address-wrapper {
+    -fx-background-color: #eeeeee;
+    -fx-background-radius: 20;
+    -fx-border-radius: 20;
+    -fx-borer-width: 1;
+    -fx-border-color: #b8b8b6;
+}
+
+#address-wrapper {
+    -fx-background-radius: 5;
+    -fx-border-radius: 5;
+}

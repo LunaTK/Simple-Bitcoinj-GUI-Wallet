@@ -1,0 +1,23 @@
+#btn-close {
+    -fx-background-radius: 20%;
+    -fx-border-radius: 20%;
+    -fx-background-repeat: stretch;
+    -fx-background-size: 20 20;
+    -fx-background-position: center center;
+    -fx-background-image: url("close.png");
+}
+
+#btn-refresh {
+    -fx-background-image: url("resources/refresh.png");
+    -fx-background-repeat: stretch;
+    -fx-background-size: 10 10;
+    -fx-background-position: center center;
+}
+
+
+#btn-copy {
+    -fx-background-image: url("resources/clipboards.png");
+    -fx-background-repeat: stretch;
+    -fx-background-size: 20 20;
+    -fx-background-position: center center;
+}

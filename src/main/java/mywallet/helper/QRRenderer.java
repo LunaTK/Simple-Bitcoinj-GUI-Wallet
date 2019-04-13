@@ -1,4 +1,4 @@
-package mywallet;
+package mywallet.helper;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
@@ -32,11 +32,11 @@ public class QRRenderer {
         QRCodeWriter qrCodeWriter = new QRCodeWriter();
         int width = 400;
         int height = 400;
+        Map<EncodeHintType, Object> hints = new EnumMap<EncodeHintType, Object>(EncodeHintType.class);
+        hints.put(EncodeHintType.CHARACTER_SET, "UTF-8");
+        hints.put(EncodeHintType.MARGIN, 2); /* default = 4 */
 
         try {
-            Map<EncodeHintType, Object> hints = new EnumMap<EncodeHintType, Object>(EncodeHintType.class);
-            hints.put(EncodeHintType.CHARACTER_SET, "UTF-8");
-            hints.put(EncodeHintType.MARGIN, 2); /* default = 4 */
             BitMatrix byteMatrix = qrCodeWriter.encode(content, BarcodeFormat.QR_CODE, width, height, hints);
             bufferedImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
             bufferedImage.createGraphics();

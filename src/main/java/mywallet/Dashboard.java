@@ -1,12 +1,17 @@
 package mywallet;
 
+import java.io.File;
+import java.util.concurrent.Executor;
+
 import org.bitcoinj.core.ECKey;
 import org.bitcoinj.core.NetworkParameters;
 import org.bitcoinj.kits.WalletAppKit;
 import org.bitcoinj.params.TestNet3Params;
 import org.bitcoinj.utils.BriefLogFormatter;
+import org.bitcoinj.utils.Threading;
 
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -15,7 +20,6 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-import java.io.File;
 
 public class Dashboard extends Application {
     double xOffset, yOffset;
@@ -25,11 +29,12 @@ public class Dashboard extends Application {
     public void start(final Stage primaryStage) throws Exception {
         // URL myFxmlURL = ClassLoader.getSystemResource("sample.fxml");
         // root = FXMLLoader.load(myFxmlURL);
-        root = FXMLLoader.load(getClass().getResource("sample.fxml"));
+        setRunningThread();
+        root = FXMLLoader.load(getClass().getResource("fxml/sample.fxml"));
 
         Scene scene = new Scene(root);
         primaryStage.initStyle(StageStyle.TRANSPARENT);
-        primaryStage.setTitle("Hello World");
+        primaryStage.setTitle("Bitcoin Wallet");
         scene.setFill(Color.TRANSPARENT);
         primaryStage.setScene(scene);
         primaryStage.show();
@@ -48,9 +53,10 @@ public class Dashboard extends Application {
                 primaryStage.setY(event.getScreenY() - yOffset);
             }
         });
+
     }
 
-    private static void initWallet() {
+    private void initWallet() {
         BriefLogFormatter.initWithSilentBitcoinJ();
         NetworkParameters params = TestNet3Params.get();
         String filePrefix = "forwarding-service-testnet";
@@ -71,6 +77,12 @@ public class Dashboard extends Application {
         };
         kit.startAsync();
         kit.awaitRunning();
+    }
+
+    private void setRunningThread() {
+        Threading.USER_THREAD = (Runnable runnable) -> {
+            Platform.runLater(runnable);
+        };
     }
 
     public static void main(String[] args) {

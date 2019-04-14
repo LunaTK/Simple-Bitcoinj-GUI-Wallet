@@ -35,10 +35,12 @@ public class DialogBuilder {
         btnOk.setOnMouseClicked(onOk == null ? (e) -> {
             dialog.close();
         } : onOk);
+        btnOk.setStyle("-fx-text-fill: green;");
         JFXButton btnCancel = new JFXButton("CANCEL");
         btnCancel.setOnMouseClicked(onCancel == null ? (e) -> {
             dialog.close();
         } : onCancel);
+        btnCancel.setStyle("-fx-text-fill: red;");
         content.setActions(btnOk, btnCancel);
         return dialog;
     }

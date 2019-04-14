@@ -26,6 +26,14 @@ $ ./gradlew run
 ![Send Bitcoin](screenshots/send.png)
 ![Request Bitcoin](screenshots/request.png)
 
+# Donation
+
+I will be expecting some donations, no matter how much :)
+
+![My Bitcoin Address](screenshots/address.png)
+
+**Bitcoin Address** : 1NzNNrSCStaTib9jnRSZ5kDQhoVosohpUR
+
 # License
 
 [MIT](LICENSE)

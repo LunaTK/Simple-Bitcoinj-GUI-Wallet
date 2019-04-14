@@ -72,6 +72,7 @@ public class DashboardController implements Initializable, WalletCoinsReceivedEv
 
     private static WalletAppKit kit;
     private QRRenderer qrRenderer;
+    private long lastUpdateTimestamp = System.currentTimeMillis();
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -282,6 +283,10 @@ public class DashboardController implements Initializable, WalletCoinsReceivedEv
 
     @Override
     public void onWalletChanged(Wallet wallet) {
-        updateDisplayedWalletInfo();
+        long timeElapsed = System.currentTimeMillis() - lastUpdateTimestamp;
+        if (timeElapsed > 1000) {
+            updateDisplayedWalletInfo();
+            lastUpdateTimestamp = System.currentTimeMillis();
+        }
     }
 }

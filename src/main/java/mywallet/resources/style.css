@@ -37,3 +37,10 @@
     -fx-background-size: 20 20;
     -fx-background-position: center center;
 }
+
+#btn-download-qrcode {
+    -fx-background-image: url("download.png");
+    -fx-background-repeat: stretch;
+    -fx-background-size: 20 20;
+    -fx-background-position: center center;
+}

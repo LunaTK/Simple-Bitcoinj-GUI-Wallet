@@ -6,6 +6,7 @@
 <?import java.net.URL?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Tooltip?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -87,6 +88,9 @@
                                  <font>
                                     <Font size="18.0" />
                                  </font>
+                                 <tooltip>
+                                    <Tooltip text="Encrypt wallet to protect your private key" />
+                                 </tooltip>
                               </JFXButton>
                            </children>
                         </FlowPane>
@@ -97,7 +101,10 @@
                                     <Font name="NanumSquare Bold" size="13.0" />
                                  </font>
                               </Label>
-                              <JFXButton id="btn-copy-address" layoutX="315.0" onAction="#onCopyAddress" stylesheets="@../resources/style.css" text=" " />
+                              <JFXButton id="btn-copy-address" layoutX="315.0" onAction="#onCopyAddress" stylesheets="@../resources/style.css" text=" ">
+                                 <tooltip>
+                                    <Tooltip text="Copy Address" />
+                                 </tooltip></JFXButton>
                            </children>
                         </Pane>
                         <Label fx:id="labelBalance" alignment="CENTER" contentDisplay="RIGHT" layoutX="18.0" layoutY="362.0" prefHeight="44.0" prefWidth="338.0" text="0.00000000 BTC" textAlignment="RIGHT" underline="true" AnchorPane.leftAnchor="18.0" AnchorPane.rightAnchor="18.0">
@@ -115,6 +122,11 @@
                               </ImageView>
                            </children>
                         </Pane>
+                        <JFXButton id="btn-download-qrcode" layoutX="330.0" layoutY="291.0" onAction="#onCopyAddress" stylesheets="@../resources/style.css" text=" " AnchorPane.rightAnchor="16.0" AnchorPane.topAnchor="291.0">
+                           <tooltip>
+                              <Tooltip text="Download QR Image" />
+                           </tooltip>
+                        </JFXButton>
                      </children>
                   </AnchorPane>
                </children>

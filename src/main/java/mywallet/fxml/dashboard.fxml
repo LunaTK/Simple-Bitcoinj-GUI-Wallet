@@ -9,6 +9,7 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.FlowPane?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.text.Font?>
@@ -34,7 +35,7 @@
                   </AnchorPane>
                   <AnchorPane layoutX="14.0" layoutY="14.0" maxWidth="-Infinity" prefHeight="440.0" prefWidth="364.0" style="-fx-background-color: #FFC400#FFC400; -fx-background-radius: 1em; -fx-effect: dropshadow(three-pass-box, black, 10, 0, 0, 0)dropshadow(three-pass-box, purple, 10, 0, 0, 0);" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="14.0">
                      <children>
-                        <AnchorPane id="qr-display" layoutX="48.0" layoutY="74.0" prefHeight="228.0" prefWidth="259.0" stylesheets="@../resources/style.css" AnchorPane.leftAnchor="48.0" AnchorPane.rightAnchor="57.0" AnchorPane.topAnchor="74.0">
+                        <AnchorPane id="qr-display" layoutX="51.0" layoutY="97.0" prefHeight="228.0" prefWidth="259.0" stylesheets="@../resources/style.css" AnchorPane.leftAnchor="51.0" AnchorPane.rightAnchor="54.0" AnchorPane.topAnchor="97.0">
                            <children>
                               <ImageView fx:id="qrImage" fitHeight="199.0" fitWidth="222.0" layoutX="34.0" layoutY="15.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="34.0" AnchorPane.rightAnchor="33.63951110839844" AnchorPane.topAnchor="14.0">
                                  <image>
@@ -54,36 +55,40 @@
                               <Insets />
                            </opaqueInsets>
                         </JFXButton>
-                        <Pane layoutX="61.0" layoutY="26.0">
+                        <Pane layoutX="62.0" layoutY="44.0" prefHeight="44.0" prefWidth="242.0">
                            <children>
                               <ImageView fitHeight="44.0" fitWidth="54.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
                                     <Image url="@../resources/wallet.png" />
                                  </image>
                               </ImageView>
-                              <Label layoutX="64.0" layoutY="5.0" text="Wallet Address">
+                              <Label layoutX="64.0" layoutY="5.0" text="Your Address">
                                  <font>
                                     <Font name="NanumSquare Bold" size="24.0" />
                                  </font>
                               </Label>
                            </children>
                         </Pane>
-                        <JFXButton alignment="CENTER" buttonType="RAISED" layoutX="82.0" layoutY="402.0" onAction="#onSendBitcoin" text="Send Bitcoin" textFill="#6c7378" AnchorPane.leftAnchor="84.0" AnchorPane.rightAnchor="84.0">
-                           <font>
-                              <Font name="NanumSquare Bold" size="18.0" />
-                           </font>
-                        </JFXButton>
-                        <JFXButton alignment="CENTER" buttonType="RAISED" layoutX="95.0" layoutY="437.0" text="Request Bitcoin" textFill="#6c7378" AnchorPane.leftAnchor="84.0" AnchorPane.rightAnchor="84.0">
-                           <font>
-                              <Font size="19.0" />
-                           </font>
-                        </JFXButton>
-                        <JFXButton alignment="CENTER" buttonType="RAISED" layoutX="104.0" layoutY="475.0" text="Encrypt Wallet" textFill="#6c7378" AnchorPane.leftAnchor="84.0" AnchorPane.rightAnchor="84.0">
-                           <font>
-                              <Font size="18.0" />
-                           </font>
-                        </JFXButton>
-                        <Pane layoutX="22.0" layoutY="307.0" prefHeight="27.0" prefWidth="329.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0">
+                        <FlowPane alignment="CENTER" columnHalignment="CENTER" layoutX="95.0" layoutY="406.0" orientation="VERTICAL" prefWrapLength="120.0" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="97.0" AnchorPane.rightAnchor="101.0">
+                           <children>
+                              <JFXButton alignment="CENTER" buttonType="RAISED" onAction="#onSendBitcoin" text="Send Bitcoin" textFill="#6c7378">
+                                 <font>
+                                    <Font name="NanumSquare Bold" size="18.0" />
+                                 </font>
+                              </JFXButton>
+                              <JFXButton alignment="CENTER" buttonType="RAISED" text="Request Bitcoin" textFill="#6c7378">
+                                 <font>
+                                    <Font size="19.0" />
+                                 </font>
+                              </JFXButton>
+                              <JFXButton fx:id="btnEncryptWallet" alignment="CENTER" buttonType="RAISED" onAction="#onToggleWalletEncryption" text="Encrypt Wallet" textFill="#6c7378">
+                                 <font>
+                                    <Font size="18.0" />
+                                 </font>
+                              </JFXButton>
+                           </children>
+                        </FlowPane>
+                        <Pane layoutX="14.0" layoutY="335.0" prefHeight="27.0" prefWidth="329.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0">
                            <children>
                               <Label fx:id="labelAddress" alignment="CENTER_RIGHT" contentDisplay="CENTER" layoutY="4.0" prefHeight="18.0" prefWidth="304.0" text="bitcoin address" textFill="WHITE" textOverrun="CENTER_ELLIPSIS">
                                  <font>
@@ -93,11 +98,21 @@
                               <JFXButton id="btn-copy-address" layoutX="315.0" onAction="#onCopyAddress" stylesheets="@../resources/style.css" text=" " />
                            </children>
                         </Pane>
-                        <Label fx:id="labelBalance" alignment="CENTER" contentDisplay="RIGHT" layoutX="18.0" layoutY="341.0" prefHeight="44.0" prefWidth="338.0" text="0.00000000 BTC" textAlignment="RIGHT" underline="true" AnchorPane.leftAnchor="18.0" AnchorPane.rightAnchor="18.0">
+                        <Label fx:id="labelBalance" alignment="CENTER" contentDisplay="RIGHT" layoutX="18.0" layoutY="362.0" prefHeight="44.0" prefWidth="338.0" text="0.00000000 BTC" textAlignment="RIGHT" underline="true" AnchorPane.leftAnchor="18.0" AnchorPane.rightAnchor="18.0">
                            <font>
                               <Font name="NanumSquare ExtraBold" size="29.0" />
                            </font>
                         </Label>
+                        <Pane layoutX="89.0" layoutY="15.0" AnchorPane.leftAnchor="95.0" AnchorPane.rightAnchor="95.0" AnchorPane.topAnchor="15.0">
+                           <children>
+                              <Label fx:id="labelEncryptionStatus" layoutX="33.0" layoutY="3.0" text="Wallet is not encrypted" textFill="#c32121" />
+                              <ImageView fx:id="imgEncryptionStatus" fitHeight="27.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../resources/shield-red.png" />
+                                 </image>
+                              </ImageView>
+                           </children>
+                        </Pane>
                      </children>
                   </AnchorPane>
                </children>

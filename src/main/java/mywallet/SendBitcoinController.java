@@ -10,7 +10,7 @@ import org.bitcoinj.core.Address;
 import org.bitcoinj.core.Coin;
 import org.bitcoinj.core.InsufficientMoneyException;
 import org.bitcoinj.core.NetworkParameters;
-import org.bitcoinj.core.Transaction;
+import org.bitcoinj.crypto.KeyCrypterException;
 import org.bitcoinj.params.TestNet3Params;
 import org.bitcoinj.wallet.SendRequest;
 import org.bitcoinj.wallet.Wallet;
@@ -25,6 +25,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.stage.Stage;
+import mywallet.helper.DialogBuilder;
 
 public class SendBitcoinController implements Initializable {
     @FXML
@@ -65,15 +66,28 @@ public class SendBitcoinController implements Initializable {
             alert.setHeaderText("Insufficient Bitcoin Balance");
             alert.setContentText(e.getMessage());
             alert.showAndWait();
+        } catch (KeyCrypterException e) {
+            Alert alert = new Alert(AlertType.ERROR);
+            alert.setTitle("Alert");
+            alert.setHeaderText("Wrong Wallet Password");
+            alert.setContentText(e.getMessage());
+            alert.showAndWait();
         }
     }
 
-    private void sendBitcoin(String strDest, String strValue, String strMemo) throws InsufficientMoneyException {
+    private void sendBitcoin(String strDest, String strValue, String strMemo)
+            throws InsufficientMoneyException, KeyCrypterException {
         Wallet wallet = DashboardController.getKit().wallet();
         NetworkParameters params = TestNet3Params.get();
         Address destination = Address.fromString(params, strDest);
         Coin value = Coin.parseCoin(strValue);
-        SendResult result = wallet.sendCoins(SendRequest.to(destination, value));
+        SendRequest request = SendRequest.to(destination, value);
+
+        if (wallet.isEncrypted()) {
+            String password = DialogBuilder.buildPasswordInputDialog().showAndWait().get();
+            request.aesKey = wallet.getKeyCrypter().deriveKey(password);
+        }
+        SendResult result = wallet.sendCoins(request);
         result.tx.setMemo(strMemo);
     }
 

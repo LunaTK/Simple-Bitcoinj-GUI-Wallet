@@ -5,6 +5,7 @@ import com.jfoenix.controls.JFXDialog;
 import com.jfoenix.controls.JFXDialogLayout;
 
 import javafx.event.EventHandler;
+import javafx.scene.control.TextInputDialog;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
 import javafx.scene.text.Text;
@@ -25,7 +26,7 @@ public class DialogBuilder {
     public DialogBuilder() {
     }
 
-    public JFXDialog build(StackPane stackPane, EventHandler<? super MouseEvent> onOk,
+    public JFXDialog buildYesNo(StackPane stackPane, EventHandler<? super MouseEvent> onOk,
             EventHandler<? super MouseEvent> onCancel) {
         JFXDialogLayout content = new JFXDialogLayout();
         content.setHeading(new Text(title));
@@ -43,5 +44,17 @@ public class DialogBuilder {
         btnCancel.setStyle("-fx-text-fill: red;");
         content.setActions(btnOk, btnCancel);
         return dialog;
+    }
+
+    public static TextInputDialog buildPasswordInputDialog(String headerText) {
+        TextInputDialog dialog = new TextInputDialog();
+        dialog.setTitle("Wallet Password");
+        dialog.setHeaderText(headerText);
+        dialog.setContentText("Wallet Password");
+        return dialog;
+    }
+
+    public static TextInputDialog buildPasswordInputDialog() {
+        return buildPasswordInputDialog("Wallet is encrypted, password required");
     }
 }

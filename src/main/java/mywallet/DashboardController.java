@@ -7,10 +7,13 @@ import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.Set;
 
+import com.jfoenix.controls.JFXButton;
+
 import org.bitcoinj.core.Coin;
 import org.bitcoinj.core.ECKey;
 import org.bitcoinj.core.NetworkParameters;
 import org.bitcoinj.core.Transaction;
+import org.bitcoinj.crypto.KeyCrypterException;
 import org.bitcoinj.kits.WalletAppKit;
 import org.bitcoinj.params.TestNet3Params;
 import org.bitcoinj.utils.BriefLogFormatter;
@@ -26,8 +29,10 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
+import javafx.scene.paint.Paint;
 import mywallet.helper.DialogBuilder;
 import mywallet.helper.QRRenderer;
 
@@ -41,6 +46,12 @@ public class DashboardController implements Initializable {
     StackPane stackPane;
     @FXML
     Label labelBalance;
+    @FXML
+    Label labelEncryptionStatus;
+    @FXML
+    ImageView imgEncryptionStatus;
+    @FXML
+    JFXButton btnEncryptWallet;
 
     private static WalletAppKit kit;
     private WalletListener walletListener = new WalletListener();
@@ -83,10 +94,31 @@ public class DashboardController implements Initializable {
 
     @FXML
     private void exitApp(ActionEvent event) {
-        new DialogBuilder("Do you want to quit?").build(stackPane, (e) -> {
+        new DialogBuilder("Do you want to quit?").buildYesNo(stackPane, (e) -> {
             Platform.exit();
             System.exit(0);
         }, null).show();
+    }
+
+    @FXML
+    private void onToggleWalletEncryption(ActionEvent event) {
+        System.out.println("Toggle Wallet Encryption");
+        if (kit.wallet().isEncrypted()) {
+            String password = DialogBuilder.buildPasswordInputDialog("Enter current password").showAndWait().get();
+            try {
+                kit.wallet().decrypt(password);
+            } catch (KeyCrypterException e) {
+                Alert alert = new Alert(AlertType.INFORMATION);
+                alert.setTitle("Error");
+                alert.setHeaderText("Invalid password");
+                alert.setContentText("Password is wrong");
+                alert.showAndWait();
+            }
+        } else {
+            String password = DialogBuilder.buildPasswordInputDialog("Enter new password").showAndWait().get();
+            kit.wallet().encrypt(password);
+        }
+        updateDisplayedWalletEncryptionStatus();
     }
 
     @FXML
@@ -106,6 +138,25 @@ public class DashboardController implements Initializable {
             labelAddress.setText(kit.wallet().currentReceiveAddress().toString());
             new QRRenderer(kit.wallet().currentReceiveAddress().toString()).displayIn(qrImage);
             labelBalance.setText(kit.wallet().getBalance().toFriendlyString());
+        });
+        updateDisplayedWalletEncryptionStatus();
+    }
+
+    private void updateDisplayedWalletEncryptionStatus() {
+        Platform.runLater(() -> {
+            if (kit.wallet().isEncrypted()) {
+                imgEncryptionStatus
+                        .setImage(new Image(getClass().getResource("resources/shield-green.png").toString(), true));
+                labelEncryptionStatus.setText("Wallet is encrypted");
+                labelEncryptionStatus.setTextFill(Paint.valueOf("#18b663"));
+                btnEncryptWallet.setText("Decrypt Wallet");
+            } else {
+                imgEncryptionStatus
+                        .setImage(new Image(getClass().getResource("resources/shield-red.png").toString(), true));
+                labelEncryptionStatus.setText("Wallet is not encrypted");
+                labelEncryptionStatus.setTextFill(Paint.valueOf("#c32121"));
+                btnEncryptWallet.setText("Encrypt Wallet");
+            }
         });
     }
 

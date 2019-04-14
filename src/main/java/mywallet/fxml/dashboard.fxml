@@ -39,9 +39,9 @@
                      <children>
                         <AnchorPane id="qr-display" layoutX="51.0" layoutY="97.0" prefHeight="228.0" prefWidth="259.0" stylesheets="@../resources/style.css" AnchorPane.leftAnchor="51.0" AnchorPane.rightAnchor="54.0" AnchorPane.topAnchor="97.0">
                            <children>
-                              <ImageView fx:id="qrImage" fitHeight="199.0" fitWidth="222.0" layoutX="34.0" layoutY="15.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="34.0" AnchorPane.rightAnchor="33.63951110839844" AnchorPane.topAnchor="14.0">
+                              <ImageView fx:id="qrImage" fitHeight="199.0" fitWidth="222.0" layoutX="31.0" layoutY="15.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="15.0">
                                  <image>
-                                    <Image url="@../resources/bitcoin.png" />
+                                    <Image url="@../resources/qr-placeholder.png" />
                                  </image>
                               </ImageView>
                            </children>
@@ -78,7 +78,7 @@
                                     <Font name="NanumSquare Bold" size="18.0" />
                                  </font>
                               </JFXButton>
-                              <JFXButton alignment="CENTER" buttonType="RAISED" text="Request Bitcoin" textFill="#6c7378">
+                              <JFXButton alignment="CENTER" buttonType="RAISED" onAction="#onRequestBitcoin" text="Request Bitcoin" textFill="#6c7378">
                                  <font>
                                     <Font size="19.0" />
                                  </font>

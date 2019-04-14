@@ -43,7 +43,8 @@ import javafx.util.Callback;
 import mywallet.helper.DialogBuilder;
 import mywallet.helper.QRRenderer;
 
-public class DashboardController implements Initializable {
+public class DashboardController implements Initializable, WalletCoinsReceivedEventListener,
+        WalletCoinsSentEventListener, WalletChangeEventListener {
 
     @FXML
     ListView<Transaction> lvHistory;
@@ -65,7 +66,6 @@ public class DashboardController implements Initializable {
     ObservableList<Transaction> transactionHistories = FXCollections.observableArrayList();
 
     private static WalletAppKit kit;
-    private WalletListener walletListener = new WalletListener();
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -86,9 +86,9 @@ public class DashboardController implements Initializable {
                     wallet().importKey(new ECKey());
                 }
                 // kit.wallet().allowSpendingUnconfirmedTransactions();
-                kit.wallet().addCoinsReceivedEventListener(walletListener);
-                kit.wallet().addCoinsSentEventListener(walletListener);
-                kit.wallet().addChangeEventListener(walletListener);
+                kit.wallet().addCoinsReceivedEventListener(DashboardController.this);
+                kit.wallet().addCoinsSentEventListener(DashboardController.this);
+                kit.wallet().addChangeEventListener(DashboardController.this);
                 initHistoryListView();
                 updateDisplayedWalletInfo();
                 // logTransactions();
@@ -111,6 +111,11 @@ public class DashboardController implements Initializable {
     @FXML
     private void onSendBitcoin(ActionEvent event) {
         SendBitcoinController.show(getClass());
+    }
+
+    @FXML
+    private void onRequestBitcoin(ActionEvent event) {
+        RequestBitcoinController.show(getClass());
     }
 
     @FXML
@@ -219,37 +224,31 @@ public class DashboardController implements Initializable {
         return kit;
     }
 
-    private class WalletListener
-            implements WalletCoinsReceivedEventListener, WalletCoinsSentEventListener, WalletChangeEventListener {
+    @Override
+    public void onCoinsSent(Wallet wallet, Transaction tx, Coin prevBalance, Coin newBalance) {
+        Alert alert = new Alert(AlertType.INFORMATION);
+        alert.setTitle("Notice");
+        alert.setHeaderText("Coin Sent");
+        alert.setContentText("Previous balance : " + prevBalance.toFriendlyString() + "\n" + "New balance : "
+                + newBalance.toFriendlyString());
+        alert.showAndWait();
+    }
 
-        @Override
-        public void onCoinsSent(Wallet wallet, Transaction tx, Coin prevBalance, Coin newBalance) {
-            Alert alert = new Alert(AlertType.INFORMATION);
-            alert.setTitle("Notice");
-            alert.setHeaderText("Coin Sent");
-            alert.setContentText("Previous balance : " + prevBalance.toFriendlyString() + "\n" + "New balance : "
-                    + newBalance.toFriendlyString());
-            alert.showAndWait();
-        }
+    @Override
+    public void onCoinsReceived(Wallet wallet, Transaction tx, Coin prevBalance, Coin newBalance) {
+        Coin value = tx.getValueSentToMe(wallet);
+        System.out.println("Received tx for " + value.toFriendlyString() + ": " + tx);
+        System.out.println("Transaction will be forwarded after it confirms.");
 
-        @Override
-        public void onCoinsReceived(Wallet wallet, Transaction tx, Coin prevBalance, Coin newBalance) {
-            Coin value = tx.getValueSentToMe(wallet);
-            System.out.println("Received tx for " + value.toFriendlyString() + ": " + tx);
-            System.out.println("Transaction will be forwarded after it confirms.");
+        Alert alert = new Alert(AlertType.INFORMATION);
+        alert.setTitle("Notice");
+        alert.setHeaderText("Coin Received");
+        alert.setContentText("Received tx for " + tx.getTxId() + "\n" + "Received Value : " + value.toFriendlyString());
+        alert.showAndWait();
+    }
 
-            Alert alert = new Alert(AlertType.INFORMATION);
-            alert.setTitle("Notice");
-            alert.setHeaderText("Coin Received");
-            alert.setContentText(
-                    "Received tx for " + tx.getTxId() + "\n" + "Received Value : " + value.toFriendlyString());
-            alert.showAndWait();
-        }
-
-        @Override
-        public void onWalletChanged(Wallet wallet) {
-            updateDisplayedWalletInfo();
-        }
-
+    @Override
+    public void onWalletChanged(Wallet wallet) {
+        updateDisplayedWalletInfo();
     }
 }

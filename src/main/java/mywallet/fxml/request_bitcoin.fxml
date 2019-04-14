@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXTextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="454.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mywallet.RequestBitcoinController">
+   <children>
+      <JFXTextField fx:id="tfAmount" focusColor="#ffc400" labelFloat="true" layoutX="14.0" layoutY="14.0" prefHeight="27.0" prefWidth="299.0" promptText="Request Amount (BTC)" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="14.0" />
+      <JFXTextField fx:id="tfLabel" focusColor="#ffc400" layoutX="14.0" layoutY="53.0" prefHeight="27.0" prefWidth="299.0" promptText="Label" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="50.0" />
+      <JFXTextField fx:id="tfMessage" focusColor="#ffc400" layoutX="14.0" layoutY="114.0" prefHeight="27.0" prefWidth="299.0" promptText="Message" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="88.0" />
+      <JFXButton buttonType="RAISED" layoutX="330.0" layoutY="28.0" onAction="#onGenerate" prefHeight="89.0" prefWidth="98.0" style="-fx-background-color: #ffc400#ffc400 #ffc400#ffc400;" text="Generate QR" AnchorPane.leftAnchor="340.0" AnchorPane.topAnchor="28.0" />
+      <AnchorPane id="qr-display" layoutX="97.0" layoutY="142.0" prefHeight="228.0" prefWidth="259.0" stylesheets="@../resources/style.css" AnchorPane.leftAnchor="97.0" AnchorPane.rightAnchor="97.0" AnchorPane.topAnchor="150.0">
+         <children>
+            <ImageView fx:id="qrImage" fitHeight="199.0" fitWidth="222.0" layoutX="34.0" layoutY="15.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="14.0">
+               <image>
+                  <Image url="@../resources/qr-placeholder.png" />
+               </image>
+            </ImageView>
+         </children>
+      </AnchorPane>
+   </children>
+</AnchorPane>

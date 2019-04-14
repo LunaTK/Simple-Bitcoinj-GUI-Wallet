@@ -2,6 +2,7 @@
 
 <?import com.jfoenix.controls.JFXButton?>
 <?import com.jfoenix.controls.JFXTextField?>
+<?import javafx.scene.control.Tooltip?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -21,5 +22,10 @@
             </ImageView>
          </children>
       </AnchorPane>
+      <JFXButton id="btn-download-qrcode" layoutX="367.0" layoutY="352.0" onAction="#onDownloadQRImage" stylesheets="@../resources/style.css" text=" " AnchorPane.rightAnchor="65.0" AnchorPane.topAnchor="352.0">
+         <tooltip>
+            <Tooltip text="Download QR Image" />
+         </tooltip>
+      </JFXButton>
    </children>
 </AnchorPane>

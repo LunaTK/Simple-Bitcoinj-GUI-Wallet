@@ -3,6 +3,9 @@ package mywallet.helper;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.FileSystems;
 import java.util.EnumMap;
 import java.util.Map;
 
@@ -11,6 +14,7 @@ import com.google.zxing.EncodeHintType;
 import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.QRCodeWriter;
+import com.google.zxing.client.j2se.MatrixToImageWriter;
 
 import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.image.ImageView;
@@ -18,6 +22,7 @@ import javafx.scene.image.ImageView;
 public class QRRenderer {
     private String content;
     private BufferedImage bufferedImage;
+    private BitMatrix byteMatrix;
 
     public QRRenderer(String content) {
         setContent(content);
@@ -37,7 +42,7 @@ public class QRRenderer {
         hints.put(EncodeHintType.MARGIN, 2); /* default = 4 */
 
         try {
-            BitMatrix byteMatrix = qrCodeWriter.encode(content, BarcodeFormat.QR_CODE, width, height, hints);
+            byteMatrix = qrCodeWriter.encode(content, BarcodeFormat.QR_CODE, width, height, hints);
             bufferedImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
             bufferedImage.createGraphics();
 
@@ -61,5 +66,9 @@ public class QRRenderer {
 
     public void displayIn(ImageView imageView) {
         imageView.setImage(SwingFXUtils.toFXImage(bufferedImage, null));
+    }
+
+    public void saveAsFile(File file) throws IOException {
+        MatrixToImageWriter.writeToPath(byteMatrix, "PNG", file.toPath());
     }
 }

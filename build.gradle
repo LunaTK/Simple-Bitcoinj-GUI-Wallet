@@ -31,6 +31,7 @@ dependencies {
     implementation 'com.github.jengelman.gradle.plugins:shadow:2.0.1'
     implementation 'com.jfoenix:jfoenix:9.0.8' // Java 9
     implementation 'com.google.zxing:core:3.3.3'
+    implementation 'com.google.zxing:javase:3.3.3'
     // Use JUnit test framework
     testImplementation 'junit:junit:4.12'
 }

@@ -3,8 +3,10 @@ package mywallet;
 import java.awt.Toolkit;
 import java.awt.datatransfer.StringSelection;
 import java.io.File;
+import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.EventObject;
 import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.Set;
@@ -30,6 +32,7 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Label;
@@ -39,6 +42,8 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Paint;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 import javafx.util.Callback;
 import mywallet.helper.DialogBuilder;
 import mywallet.helper.QRRenderer;
@@ -66,6 +71,7 @@ public class DashboardController implements Initializable, WalletCoinsReceivedEv
     ObservableList<Transaction> transactionHistories = FXCollections.observableArrayList();
 
     private static WalletAppKit kit;
+    private QRRenderer qrRenderer;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -116,6 +122,32 @@ public class DashboardController implements Initializable, WalletCoinsReceivedEv
     @FXML
     private void onRequestBitcoin(ActionEvent event) {
         RequestBitcoinController.show(getClass());
+    }
+
+    @FXML
+    private void onDownloadQRImage(ActionEvent event) {
+        Stage stage = (Stage) ((Node) ((EventObject) event).getSource()).getScene().getWindow();
+        FileChooser fileChooser = new FileChooser();
+
+        // Set extension filter for text files
+        FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("PNG files (*.png)", "*.png");
+        fileChooser.getExtensionFilters().add(extFilter);
+        fileChooser.setInitialFileName("my-bitcoin-address");
+
+        // Show save file dialog
+        File file = fileChooser.showSaveDialog(stage);
+
+        if (file != null) {
+            try {
+                qrRenderer.saveAsFile(file);
+            } catch (IOException e) {
+                Alert alert = new Alert(AlertType.ERROR);
+                alert.setTitle("Error");
+                alert.setHeaderText("Failed to save QR Image");
+                alert.setContentText(e.getMessage());
+                alert.showAndWait();
+            }
+        }
     }
 
     @FXML
@@ -171,8 +203,9 @@ public class DashboardController implements Initializable, WalletCoinsReceivedEv
 
     private void updateDisplayedWalletInfo() {
         Platform.runLater(() -> {
+            qrRenderer = new QRRenderer(kit.wallet().currentReceiveAddress().toString());
+            qrRenderer.displayIn(qrImage);
             labelAddress.setText(kit.wallet().currentReceiveAddress().toString());
-            new QRRenderer(kit.wallet().currentReceiveAddress().toString()).displayIn(qrImage);
             labelBalance.setText(kit.wallet().getBalance().toFriendlyString());
         });
         updateDisplayedWalletEncryptionStatus();

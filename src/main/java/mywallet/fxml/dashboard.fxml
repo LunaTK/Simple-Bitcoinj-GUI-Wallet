@@ -122,7 +122,7 @@
                               </ImageView>
                            </children>
                         </Pane>
-                        <JFXButton id="btn-download-qrcode" layoutX="330.0" layoutY="291.0" onAction="#onCopyAddress" stylesheets="@../resources/style.css" text=" " AnchorPane.rightAnchor="16.0" AnchorPane.topAnchor="291.0">
+                        <JFXButton id="btn-download-qrcode" layoutX="330.0" layoutY="291.0" onAction="#onDownloadQRImage" stylesheets="@../resources/style.css" text=" " AnchorPane.rightAnchor="16.0" AnchorPane.topAnchor="291.0">
                            <tooltip>
                               <Tooltip text="Download QR Image" />
                            </tooltip>

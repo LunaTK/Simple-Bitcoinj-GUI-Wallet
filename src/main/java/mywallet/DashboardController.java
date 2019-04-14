@@ -5,22 +5,19 @@ import java.awt.datatransfer.StringSelection;
 import java.io.File;
 import java.net.URL;
 import java.util.ResourceBundle;
-
-import com.google.common.util.concurrent.FutureCallback;
-import com.google.common.util.concurrent.Futures;
+import java.util.Set;
 
 import org.bitcoinj.core.Coin;
 import org.bitcoinj.core.ECKey;
 import org.bitcoinj.core.NetworkParameters;
 import org.bitcoinj.core.Transaction;
-import org.bitcoinj.core.TransactionConfidence;
 import org.bitcoinj.kits.WalletAppKit;
 import org.bitcoinj.params.TestNet3Params;
 import org.bitcoinj.utils.BriefLogFormatter;
-import org.bitcoinj.utils.Threading;
 import org.bitcoinj.wallet.Wallet;
 import org.bitcoinj.wallet.listeners.WalletChangeEventListener;
 import org.bitcoinj.wallet.listeners.WalletCoinsReceivedEventListener;
+import org.bitcoinj.wallet.listeners.WalletCoinsSentEventListener;
 
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -45,7 +42,8 @@ public class DashboardController implements Initializable {
     @FXML
     Label labelBalance;
 
-    private WalletAppKit kit;
+    private static WalletAppKit kit;
+    private WalletListener walletListener = new WalletListener();
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -62,77 +60,25 @@ public class DashboardController implements Initializable {
         kit = new WalletAppKit(params, new File("."), filePrefix) {
             @Override
             protected void onSetupCompleted() {
-                System.out.println(wallet().getKeyChainSeed().getMnemonicCode());
                 if (wallet().getKeyChainGroupSize() < 1) {
                     wallet().importKey(new ECKey());
                 }
+                // kit.wallet().allowSpendingUnconfirmedTransactions();
+                kit.wallet().addCoinsReceivedEventListener(walletListener);
+                kit.wallet().addCoinsSentEventListener(walletListener);
+                kit.wallet().addChangeEventListener(walletListener);
                 updateDisplayedWalletInfo();
-                System.out.println(wallet().currentReceiveAddress());
-                System.out.println(wallet().getIssuedReceiveKeys());
-
-                System.out.println(wallet().getBalance());
-                System.out.println(wallet().getRecentTransactions(10, true));
-
+                logTransactions();
             }
         };
-
         kit.startAsync();
         // kit.awaitRunning();
-
-        kit.wallet().addChangeEventListener(new WalletChangeEventListener() {
-
-            @Override
-            public void onWalletChanged(Wallet wallet) {
-                System.out.println("Something changed in wallet");
-            }
-        });
-        kit.wallet().addCoinsReceivedEventListener(new WalletCoinsReceivedEventListener() {
-            @Override
-            public void onCoinsReceived(Wallet w, Transaction tx, Coin prevBalance, Coin newBalance) {
-                // Runs in the dedicated "user thread".
-                //
-                // The transaction "tx" can either be pending, or included into a block (we
-                // didn't see the broadcast).
-                Coin value = tx.getValueSentToMe(w);
-                System.out.println("Received tx for " + value.toFriendlyString() + ": " + tx);
-                System.out.println("Transaction will be forwarded after it confirms.");
-
-                Alert alert = new Alert(AlertType.WARNING);
-                alert.setTitle("Alert");
-                alert.setHeaderText("Incoming Transaction");
-                alert.setContentText("Received tx for " + value.toFriendlyString() + ": " + tx);
-
-                alert.showAndWait();
-                // Wait until it's made it into the block chain (may run immediately if it's
-                // already there).
-                //
-                // For this dummy app of course, we could just forward the unconfirmed
-                // transaction. If it were
-                // to be double spent, no harm done.
-                // Wallet.allowSpendingUnconfirmedTransactions() would have to
-                // be called in onSetupCompleted() above. But we don't do that here to
-                // demonstrate the more common
-                // case of waiting for a block.
-
-                Futures.addCallback(tx.getConfidence().getDepthFuture(1), new FutureCallback<TransactionConfidence>() {
-                    @Override
-                    public void onSuccess(TransactionConfidence result) {
-                        // "result" here is the same as "tx" above, but we use it anyway for clarity.
-                        // forwardCoins(result);
-                        System.out.println(result.toString());
-                    }
-
-                    @Override
-                    public void onFailure(Throwable t) {
-                    }
-                }, Threading.SAME_THREAD);
-            }
-        });
 
     }
 
     @FXML
     private void onSendBitcoin(ActionEvent event) {
+        SendBitcoinController.show(getClass());
     }
 
     @FXML
@@ -148,7 +94,7 @@ public class DashboardController implements Initializable {
         Toolkit.getDefaultToolkit().getSystemClipboard()
                 .setContents(new StringSelection(kit.wallet().currentReceiveAddress().toString()), null);
 
-        Alert alert = new Alert(AlertType.WARNING);
+        Alert alert = new Alert(AlertType.INFORMATION);
         alert.setTitle("Alert");
         alert.setHeaderText("Address Copied!");
         alert.setContentText(kit.wallet().currentReceiveAddress().toString());
@@ -157,14 +103,60 @@ public class DashboardController implements Initializable {
 
     private void updateDisplayedWalletInfo() {
         Platform.runLater(() -> {
-            System.out.println("Updating displayed wallet info...");
             labelAddress.setText(kit.wallet().currentReceiveAddress().toString());
-            System.out.println("labelAddress : " + kit.wallet().currentReceiveAddress().toString());
             new QRRenderer(kit.wallet().currentReceiveAddress().toString()).displayIn(qrImage);
-            System.out.println("QRCode complete");
             labelBalance.setText(kit.wallet().getBalance().toFriendlyString());
-            System.out.println("labelBalance complete : " + kit.wallet().getBalance().toFriendlyString());
         });
     }
 
+    private void logTransactions() {
+        Set<Transaction> transactions = kit.wallet().getTransactions(true);
+        for (Transaction tx : transactions) {
+            System.out.println("TXID : " + tx.getTxId());
+            System.out.println("Confidence : " + tx.getConfidence());
+            System.out.println("Value Sent to Me : " + tx.getValueSentToMe(kit.wallet()));
+            System.out.println("Value Sent from Me : " + tx.getValueSentFromMe(kit.wallet()));
+            System.out.println("Memo : " + tx.getMemo());
+            System.out.println("Purpose : " + tx.getPurpose());
+            System.out.println("-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=");
+        }
+    }
+
+    public static WalletAppKit getKit() {
+        return kit;
+    }
+
+    private class WalletListener
+            implements WalletCoinsReceivedEventListener, WalletCoinsSentEventListener, WalletChangeEventListener {
+
+        @Override
+        public void onCoinsSent(Wallet wallet, Transaction tx, Coin prevBalance, Coin newBalance) {
+            Alert alert = new Alert(AlertType.INFORMATION);
+            alert.setTitle("Notice");
+            alert.setHeaderText("Coin Sent");
+            alert.setContentText("Previous balance : " + prevBalance.toFriendlyString() + "\n" + "New balance : "
+                    + newBalance.toFriendlyString());
+            alert.showAndWait();
+        }
+
+        @Override
+        public void onCoinsReceived(Wallet wallet, Transaction tx, Coin prevBalance, Coin newBalance) {
+            Coin value = tx.getValueSentToMe(wallet);
+            System.out.println("Received tx for " + value.toFriendlyString() + ": " + tx);
+            System.out.println("Transaction will be forwarded after it confirms.");
+
+            Alert alert = new Alert(AlertType.INFORMATION);
+            alert.setTitle("Notice");
+            alert.setHeaderText("Coin Received");
+            alert.setContentText(
+                    "Received tx for " + tx.getTxId() + "\n" + "Received Value : " + value.toFriendlyString());
+            alert.showAndWait();
+        }
+
+        @Override
+        public void onWalletChanged(Wallet wallet) {
+            updateDisplayedWalletInfo();
+        }
+
+    }
 }

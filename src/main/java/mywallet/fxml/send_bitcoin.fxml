@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXTextField?>
+<?import javafx.scene.layout.AnchorPane?>
+
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="152.0" prefWidth="528.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mywallet.SendBitcoinController">
+   <children>
+      <JFXTextField fx:id="labelTo" focusColor="#ffc400" labelFloat="true" layoutX="14.0" layoutY="14.0" prefHeight="15.0" prefWidth="381.0" promptText="Send to" />
+      <JFXTextField fx:id="labelAmount" focusColor="#ffc400" labelFloat="true" layoutX="14.0" layoutY="59.0" prefHeight="27.0" prefWidth="381.0" promptText="Amount (BTC)" />
+      <JFXTextField fx:id="labelMemo" focusColor="#ffc400" labelFloat="true" layoutX="14.0" layoutY="103.0" prefHeight="27.0" prefWidth="381.0" promptText="Memo" />
+      <JFXButton layoutX="418.0" layoutY="16.0" onAction="#onSendBitcoin" prefHeight="118.0" prefWidth="96.0" style="-fx-background-color: #ffc400#ffc400;" text="Send Bitcoin" />
+   </children>
+</AnchorPane>

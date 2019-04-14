@@ -22,8 +22,7 @@
     -fx-background-position: center center;
 }
 
-#qr-display,
-#address-wrapper {
+#qr-display {
     -fx-background-color: #eeeeee;
     -fx-background-radius: 20;
     -fx-border-radius: 20;
@@ -31,10 +30,6 @@
     -fx-border-color: #b8b8b6;
 }
 
-#address-wrapper {
-    -fx-background-radius: 5;
-    -fx-border-radius: 5;
-}
 
 #btn-copy-address {
     -fx-background-image: url("copy.png");

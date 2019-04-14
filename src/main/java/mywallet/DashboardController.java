@@ -138,6 +138,12 @@ public class DashboardController implements Initializable {
                 }
             }
         } else {
+            Alert alert = new Alert(AlertType.WARNING);
+            alert.setTitle("Warning");
+            alert.setHeaderText("!!! IMPORTANT !!!");
+            alert.setContentText(
+                    "There is no way to recover password. \nIf you forget the password, \nyou lost your bitcoin FOREVER.");
+            alert.showAndWait();
             Optional<String> password = DialogBuilder.buildPasswordInputDialog("Enter new password").showAndWait();
             if (!password.isEmpty()) {
                 kit.wallet().encrypt(password.get());

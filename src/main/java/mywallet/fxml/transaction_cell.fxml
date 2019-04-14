@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
+
+
+<AnchorPane fx:id="rootPane" prefHeight="115.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <Pane layoutX="14.0" layoutY="14.0" AnchorPane.leftAnchor="8.0" AnchorPane.topAnchor="4.0">
+         <children>
+            <Label fx:id="labelTitle" layoutX="40.0" prefHeight="29.0" text="Sent">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
+            <ImageView fx:id="ivType" fitHeight="29.0" fitWidth="57.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../resources/sent.png" />
+               </image>
+            </ImageView>
+         </children>
+      </Pane>
+      <Pane layoutX="24.0" layoutY="47.0" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="40.0">
+         <children>
+            <Label text="Value : " />
+            <Label fx:id="labelValue" layoutX="51.0" prefHeight="17.0" text="value" />
+         </children>
+      </Pane>
+      <Pane fx:id="paneFee" layoutX="128.0" layoutY="47.0" AnchorPane.rightAnchor="8.0" AnchorPane.topAnchor="40.0">
+         <children>
+            <Label text="Fee : " />
+            <Label fx:id="labelFee" layoutX="34.0" layoutY="1.0" text="fee" />
+         </children>
+      </Pane>
+      <Label fx:id="labelMemo" layoutX="367.0" layoutY="14.0" maxWidth="200.0" text="memo" AnchorPane.rightAnchor="8.0" AnchorPane.topAnchor="8.0" />
+      <JFXButton buttonType="RAISED" layoutX="263.0" layoutY="51.0" onAction="#onSeeInBlockExplorer" style="-fx-background-color: #34343411;" text="See in BlockExplorer" AnchorPane.leftAnchor="4.0" AnchorPane.topAnchor="84.0" />
+      <Pane layoutX="24.0" layoutY="112.0" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="62.0">
+         <children>
+            <Label text="Confirmation : " />
+            <Label fx:id="labelConfirmation" layoutX="91.0" text="confirmation" />
+         </children>
+      </Pane>
+      <Label fx:id="labelTime" layoutX="255.0" layoutY="102.0" prefHeight="17.0" text="timestamp" textFill="#808080" AnchorPane.rightAnchor="4.0" AnchorPane.topAnchor="90.0" />
+   </children>
+</AnchorPane>

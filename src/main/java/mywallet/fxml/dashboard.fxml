@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXListView?>
 <?import com.jfoenix.controls.JFXToolbar?>
 <?import java.net.URL?>
 <?import javafx.geometry.Insets?>
@@ -22,6 +23,7 @@
                <children>
                   <AnchorPane layoutX="366.0" layoutY="22.0" maxWidth="409.0" prefHeight="424.0" prefWidth="379.0" style="-fx-background-color: white; -fx-background-radius: 1em; -fx-border-width: 1; -fx-border-color: #424242#424242; -fx-border-radius: 5; -fx-effect: dropshadow(three-pass-box, black, 10, 0, 0, 0)dropshadow(three-pass-box, purple, 10, 0, 0, 0);" AnchorPane.bottomAnchor="22.0" AnchorPane.leftAnchor="366.0" AnchorPane.rightAnchor="23.0" AnchorPane.topAnchor="22.0">
                      <children>
+                        <JFXListView fx:id="lvHistory" editable="true" layoutX="3.0" layoutY="47.0" prefHeight="475.0" prefWidth="377.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="46.0" />
                         <JFXToolbar layoutX="3.0" layoutY="3.0" prefHeight="44.0" prefWidth="375.0" style="-fx-background-color: #FFC400#FFC400; -fx-border-radius: 0 5 0 0; -fx-background-radius: 0 5 0 0;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                            <center>
                               <Label text="Transaction History" BorderPane.alignment="CENTER">

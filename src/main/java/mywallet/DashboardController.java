@@ -4,6 +4,8 @@ import java.awt.Toolkit;
 import java.awt.datatransfer.StringSelection;
 import java.io.File;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.Set;
 
@@ -23,21 +25,28 @@ import org.bitcoinj.wallet.listeners.WalletCoinsReceivedEventListener;
 import org.bitcoinj.wallet.listeners.WalletCoinsSentEventListener;
 
 import javafx.application.Platform;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListCell;
+import javafx.scene.control.ListView;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Paint;
+import javafx.util.Callback;
 import mywallet.helper.DialogBuilder;
 import mywallet.helper.QRRenderer;
 
 public class DashboardController implements Initializable {
 
+    @FXML
+    ListView<Transaction> lvHistory;
     @FXML
     ImageView qrImage;
     @FXML
@@ -52,6 +61,8 @@ public class DashboardController implements Initializable {
     ImageView imgEncryptionStatus;
     @FXML
     JFXButton btnEncryptWallet;
+
+    ObservableList<Transaction> transactionHistories = FXCollections.observableArrayList();
 
     private static WalletAppKit kit;
     private WalletListener walletListener = new WalletListener();
@@ -78,13 +89,23 @@ public class DashboardController implements Initializable {
                 kit.wallet().addCoinsReceivedEventListener(walletListener);
                 kit.wallet().addCoinsSentEventListener(walletListener);
                 kit.wallet().addChangeEventListener(walletListener);
+                initHistoryListView();
                 updateDisplayedWalletInfo();
-                logTransactions();
+                // logTransactions();
             }
         };
         kit.startAsync();
         // kit.awaitRunning();
+    }
 
+    private void initHistoryListView() {
+        lvHistory.setCellFactory(new Callback<ListView<Transaction>, ListCell<Transaction>>() {
+            @Override
+            public ListCell<Transaction> call(ListView<Transaction> param) {
+                return new HistoryCell();
+            }
+        });
+        lvHistory.setItems(transactionHistories);
     }
 
     @FXML
@@ -104,19 +125,23 @@ public class DashboardController implements Initializable {
     private void onToggleWalletEncryption(ActionEvent event) {
         System.out.println("Toggle Wallet Encryption");
         if (kit.wallet().isEncrypted()) {
-            String password = DialogBuilder.buildPasswordInputDialog("Enter current password").showAndWait().get();
-            try {
-                kit.wallet().decrypt(password);
-            } catch (KeyCrypterException e) {
-                Alert alert = new Alert(AlertType.INFORMATION);
-                alert.setTitle("Error");
-                alert.setHeaderText("Invalid password");
-                alert.setContentText("Password is wrong");
-                alert.showAndWait();
+            Optional<String> password = DialogBuilder.buildPasswordInputDialog("Enter current password").showAndWait();
+            if (!password.isEmpty()) {
+                try {
+                    kit.wallet().decrypt(password.get());
+                } catch (KeyCrypterException e) {
+                    Alert alert = new Alert(AlertType.INFORMATION);
+                    alert.setTitle("Error");
+                    alert.setHeaderText("Invalid password");
+                    alert.setContentText("Password is wrong");
+                    alert.showAndWait();
+                }
             }
         } else {
-            String password = DialogBuilder.buildPasswordInputDialog("Enter new password").showAndWait().get();
-            kit.wallet().encrypt(password);
+            Optional<String> password = DialogBuilder.buildPasswordInputDialog("Enter new password").showAndWait();
+            if (!password.isEmpty()) {
+                kit.wallet().encrypt(password.get());
+            }
         }
         updateDisplayedWalletEncryptionStatus();
     }
@@ -140,6 +165,17 @@ public class DashboardController implements Initializable {
             labelBalance.setText(kit.wallet().getBalance().toFriendlyString());
         });
         updateDisplayedWalletEncryptionStatus();
+        updateDisplayedTransactionHistories();
+    }
+
+    private void updateDisplayedTransactionHistories() {
+        Platform.runLater(() -> {
+            ArrayList<Transaction> txList = new ArrayList(kit.wallet().getTransactions(true));
+            txList.sort((tx1, tx2) -> {
+                return tx2.getUpdateTime().compareTo(tx1.getUpdateTime());
+            });
+            transactionHistories.setAll(txList);
+        });
     }
 
     private void updateDisplayedWalletEncryptionStatus() {

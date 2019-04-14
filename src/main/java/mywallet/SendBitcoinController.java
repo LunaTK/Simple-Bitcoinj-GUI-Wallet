@@ -2,6 +2,7 @@ package mywallet;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 import com.jfoenix.controls.JFXTextField;
@@ -84,8 +85,10 @@ public class SendBitcoinController implements Initializable {
         SendRequest request = SendRequest.to(destination, value);
 
         if (wallet.isEncrypted()) {
-            String password = DialogBuilder.buildPasswordInputDialog().showAndWait().get();
-            request.aesKey = wallet.getKeyCrypter().deriveKey(password);
+            Optional<String> password = DialogBuilder.buildPasswordInputDialog().showAndWait();
+            if (!password.isEmpty()) {
+                request.aesKey = wallet.getKeyCrypter().deriveKey(password.get());
+            }
         }
         SendResult result = wallet.sendCoins(request);
         result.tx.setMemo(strMemo);

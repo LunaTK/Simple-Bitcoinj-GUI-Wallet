@@ -30,11 +30,11 @@ import mywallet.helper.DialogBuilder;
 
 public class SendBitcoinController implements Initializable {
     @FXML
-    JFXTextField labelTo;
+    JFXTextField tfTo;
     @FXML
-    JFXTextField labelAmount;
+    JFXTextField tfAmount;
     @FXML
-    JFXTextField labelMemo;
+    JFXTextField tfMemo;
 
     public static void show(Class<?> kClass) {
         Parent root;
@@ -56,9 +56,9 @@ public class SendBitcoinController implements Initializable {
 
     @FXML
     private void onSendBitcoin(ActionEvent event) {
-        String destination = labelTo.getText();
-        String value = labelAmount.getText();
-        String memo = labelMemo.getText();
+        String destination = tfTo.getText();
+        String value = tfAmount.getText();
+        String memo = tfMemo.getText();
         try {
             sendBitcoin(destination, value, memo);
         } catch (InsufficientMoneyException e) {

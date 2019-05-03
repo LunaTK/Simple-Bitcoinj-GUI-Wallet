@@ -1,8 +1,7 @@
 # Simple BitcoinJ GUI Wallet
 
-> Simple bitcoin GUI wallet using [BitcoinJ](https://bitcoinj.github.io) library and JavaFX. 
-
-> Configured to testnet environment.
+* Simple bitcoin GUI wallet using [BitcoinJ](https://bitcoinj.github.io) library and JavaFX. 
+* Tested on testnet environment.
 
 
 # Requirements
